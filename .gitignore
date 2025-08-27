@@ -1,5 +1,24 @@
 ﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+# Ignore Visual Studio temporary files, build results, and files generated 
+# by popular Visual Studio add-ons.
 ################################################################################
 
-/obj/Debug/net6.0/PlantDiaganoseDisease.AssemblyInfoInputs.cache
+# Visual Studio cache/options directory
+.vs/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+
+# Auto generated files
+*.pdb
+*.cache
+*.tmp
+*.dbmdl
