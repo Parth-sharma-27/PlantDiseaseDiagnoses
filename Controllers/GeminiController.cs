@@ -248,6 +248,256 @@ namespace PlantDiaganoseDisease.Controllers
                 return Ok(new { rawGeminiOutput = answer });
             }
         }
+        [HttpPost("FertilizerRecommendation")]
+        public async Task<IActionResult> FertilizerRecommendation([FromBody] FertilizerReq input)
+        {
+            if (input == null || string.IsNullOrWhiteSpace(input.CropType) || string.IsNullOrWhiteSpace(input.SoilType))
+                return BadRequest("Crop type and soil type are required.");
+
+            string prompt = $@"
+                You are an expert in agricultural fertilizer recommendations.
+
+                Based on the input details, provide fertilizer recommendations.
+                Respond in the same language as the user input (e.g., Hindi, English, Tamil).
+                Use this exact JSON structure:
+                {{
+                  ""primaryFertilizer"": ""string"",
+                  ""quantityRequired"": ""string"",
+                  ""applicationTime"": ""string"",
+                  ""applicationMethod"": ""string"",
+                  ""applicationSchedule"": [
+                    {{ ""stage"": ""string"", ""fertilizer"": ""string"", ""quantity"": ""string"", ""timing"": ""string"" }}
+                  ],
+                  ""applicationTips"": [""tip1"", ""tip2""]
+                }}
+
+                Input Details:
+                Crop: {input.CropType}
+                Soil Type: {input.SoilType}
+                Farm Area: {input.FarmArea} acres
+                Growth Stage: {input.GrowthStage}
+                Previous Fertilizer Used: {input.PreviousFertilizer}
+                ";
+
+            var payload = new
+            {
+                contents = new[]
+                {
+            new
+            {
+                parts = new[]
+                {
+                    new { text = prompt }
+                }
+            }
+        }
+            };
+
+            var client = _httpClientFactory.CreateClient();
+            var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+            var apiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/{_geminiSettings.Model}:generateContent?key={_geminiSettings.ApiKey}";
+            var response = await client.PostAsync(apiUrl, content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                return StatusCode((int)response.StatusCode, new { error = "Gemini API error", details = errorBody });
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var geminiResponse = JsonDocument.Parse(responseBody);
+
+            var answer = geminiResponse
+                .RootElement
+                .GetProperty("candidates")[0]
+                .GetProperty("content")
+                .GetProperty("parts")[0]
+                .GetProperty("text")
+                .GetString();
+
+            try
+            {
+                // Clean markdown if present
+                var cleanedJson = answer
+                    .Replace("```json", "", StringComparison.OrdinalIgnoreCase)
+                    .Replace("```", "", StringComparison.OrdinalIgnoreCase)
+                    .Trim();
+
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+                var fertilizerResponse = JsonSerializer.Deserialize<FertilizerResponse>(cleanedJson, options);
+
+                return Ok(fertilizerResponse);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { rawGeminiOutput = answer, error = ex.Message });
+            }
+        }
+        [HttpPost("IrrigationRecommendation")]
+        public async Task<IActionResult> IrrigationRecommendation([FromBody] IrrigationReq input)
+        {
+            if (input == null || string.IsNullOrWhiteSpace(input.CropType) || string.IsNullOrWhiteSpace(input.SoilType))
+                return BadRequest("Crop type and soil type are required.");
+
+            string prompt = $@"
+        You are an expert in agricultural irrigation recommendations.
+
+        Based on the input details, provide irrigation recommendations.
+        Respond strictly in JSON only, with no extra commentary.
+        Use the same language as the input request (English, Hindi, Tamil, etc.).
+
+        JSON format:
+        {{
+          ""irrigationFrequency"": ""string"",
+          ""waterRequired"": ""string"",
+          ""duration"": ""string"",
+          ""bestTime"": ""string"",
+          ""irrigationSchedule"": [
+            {{ ""stage"": ""string"", ""frequency"": ""string"", ""waterDepth"": ""string"", ""duration"": ""string"" }}
+          ],
+          ""irrigationTips"": [""tip1"", ""tip2""]
+        }}
+
+        Input Details:
+        Crop: {input.CropType}
+        Soil Type: {input.SoilType}
+        Farm Area: {input.FarmArea} acres
+        Irrigation Method: {input.IrrigationMethod}
+        Water Source: {input.WaterSource}
+    ";
+
+            var payload = new
+            {
+                contents = new[]
+                {
+            new
+            {
+                parts = new[] { new { text = prompt } }
+            }
+        }
+            };
+
+            var client = _httpClientFactory.CreateClient();
+            var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+            var apiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/{_geminiSettings.Model}:generateContent?key={_geminiSettings.ApiKey}";
+            var response = await client.PostAsync(apiUrl, content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                return StatusCode((int)response.StatusCode, new { error = "Gemini API error", details = errorBody });
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var geminiResponse = JsonDocument.Parse(responseBody);
+
+            var answer = geminiResponse
+                .RootElement
+                .GetProperty("candidates")[0]
+                .GetProperty("content")
+                .GetProperty("parts")[0]
+                .GetProperty("text")
+                .GetString();
+
+            try
+            {
+                var cleanedJson = answer
+                    .Replace("```json", "", StringComparison.OrdinalIgnoreCase)
+                    .Replace("```", "", StringComparison.OrdinalIgnoreCase)
+                    .Trim();
+
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+                var irrigationResponse = JsonSerializer.Deserialize<IrrigationResponse>(cleanedJson, options);
+
+                return Ok(irrigationResponse);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { rawGeminiOutput = answer, error = ex.Message });
+            }
+        }
+
+        [HttpPost("GetWeather")]
+        public async Task<IActionResult> GetWeather([FromBody] LocationReq request)
+        {
+            try
+            {
+                // Step 1: Extract latitude & longitude from model
+                double latitude = request.Latitude;
+                double longitude = request.Longitude;
+
+                // Step 2: Create Gemini prompt
+                string prompt = $@"
+        You are a weather assistant.
+        Based on the given location (lat: {latitude}, lon: {longitude}),
+        provide the current weather information.
+
+        Use this exact JSON structure:
+        {{
+          ""temperature"": ""string"",
+          ""condition"": ""string"",
+          ""humidity"": ""string"",
+          ""windSpeed"": ""string"",
+          ""visibility"": ""string""
+        }}
+        ";
+
+                var payload = new
+                {
+                    contents = new[]
+                    {
+                new
+                {
+                    parts = new[]
+                    {
+                        new { text = prompt }
+                    }
+                }
+            }
+                };
+
+                // Step 3: Call Gemini API
+                var client = _httpClientFactory.CreateClient();
+                var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+                var apiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/{_geminiSettings.Model}:generateContent?key={_geminiSettings.ApiKey}";
+                var response = await client.PostAsync(apiUrl, content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, new { error = "Gemini API error", details = errorBody });
+                }
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var geminiResponse = JsonDocument.Parse(responseBody);
+
+                var answer = geminiResponse
+                    .RootElement
+                    .GetProperty("candidates")[0]
+                    .GetProperty("content")
+                    .GetProperty("parts")[0]
+                    .GetProperty("text")
+                    .GetString();
+
+                // Step 4: Clean JSON response
+                int start = answer.IndexOf("{");
+                int end = answer.LastIndexOf("}");
+                string cleanedJson = (start >= 0 && end > start) ? answer.Substring(start, end - start + 1) : answer;
+
+                return Ok(cleanedJson);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Invalid request", details = ex.Message });
+            }
+        }
+
+
 
 
     }

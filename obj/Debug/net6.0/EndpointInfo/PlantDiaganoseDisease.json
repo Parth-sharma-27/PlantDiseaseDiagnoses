@@ -98,6 +98,99 @@
         }
       }
     },
+    "/api/Gemini/FertilizerRecommendation": {
+      "post": {
+        "tags": [
+          "Gemini"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FertilizerReq"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FertilizerReq"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FertilizerReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Gemini/IrrigationRecommendation": {
+      "post": {
+        "tags": [
+          "Gemini"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IrrigationReq"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IrrigationReq"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/IrrigationReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Gemini/GetWeather": {
+      "post": {
+        "tags": [
+          "Gemini"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationReq"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationReq"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Location/countries": {
       "get": {
         "tags": [
@@ -300,6 +393,37 @@
   },
   "components": {
     "schemas": {
+      "FertilizerReq": {
+        "type": "object",
+        "properties": {
+          "cropType": {
+            "type": "string",
+            "nullable": true
+          },
+          "soilType": {
+            "type": "string",
+            "nullable": true
+          },
+          "farmArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "growthStage": {
+            "type": "string",
+            "nullable": true
+          },
+          "previousFertilizer": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GeminiRequest": {
         "type": "object",
         "properties": {
@@ -310,6 +434,51 @@
           "lang": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IrrigationReq": {
+        "type": "object",
+        "properties": {
+          "cropType": {
+            "type": "string",
+            "nullable": true
+          },
+          "soilType": {
+            "type": "string",
+            "nullable": true
+          },
+          "farmArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "irrigationMethod": {
+            "type": "string",
+            "nullable": true
+          },
+          "waterSource": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocationReq": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

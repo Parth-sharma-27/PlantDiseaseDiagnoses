@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PlantDiaganoseDisease")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4cb30a9d40e8dfeba263194700c60a9c73fa45d0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8a817ccfe8c49057c8efe35b6a57248ad259062")]
 [assembly: System.Reflection.AssemblyProductAttribute("PlantDiaganoseDisease")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PlantDiaganoseDisease")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

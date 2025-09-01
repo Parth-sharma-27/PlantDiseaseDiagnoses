@@ -17,6 +17,54 @@
   },
   {
     "ContainingType": "PlantDiaganoseDisease.Controllers.GeminiController",
+    "Method": "FertilizerRecommendation",
+    "RelativePath": "api/Gemini/FertilizerRecommendation",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "input",
+        "Type": "PlantDiaganoseDisease.Models.RequestModels.FertilizerReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.GeminiController",
+    "Method": "GetWeather",
+    "RelativePath": "api/Gemini/GetWeather",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PlantDiaganoseDisease.Models.RequestModels.LocationReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.GeminiController",
+    "Method": "IrrigationRecommendation",
+    "RelativePath": "api/Gemini/IrrigationRecommendation",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "input",
+        "Type": "PlantDiaganoseDisease.Models.RequestModels.IrrigationReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.GeminiController",
     "Method": "CalculateTreatment",
     "RelativePath": "api/Gemini/TreatmentDosageCalculator",
     "HttpMethod": "POST",
