@@ -22,3 +22,4 @@
 *.cache
 *.tmp
 *.dbmdl
+/bin/Debug/net6.0/appsettings.json
