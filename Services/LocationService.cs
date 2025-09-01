@@ -25,7 +25,15 @@ namespace PlantDiaganoseDisease.Services
                 "https://countriesnow.space/api/v0.1/countries"
             );
 
-            return response?.Data ?? new List<Country>();
+            // return response?.Data ?? new List<Country>();
+
+            var countriesWithCities = response?.Data ?? new List<Country>();
+            // Return only country names, empty cities list
+            return countriesWithCities.Select(c => new Country
+            {
+                Name = c.Name,
+                Cities = new List<string>() // or leave null if you prefer
+            }).ToList();
         }
 
         // Get states by country name
