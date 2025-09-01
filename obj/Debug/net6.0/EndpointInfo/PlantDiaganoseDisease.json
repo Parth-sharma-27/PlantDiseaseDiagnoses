@@ -5,6 +5,163 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Gemini/ask": {
+      "post": {
+        "tags": [
+          "Gemini"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeminiRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeminiRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeminiRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Gemini/TreatmentDosageCalculator": {
+      "post": {
+        "tags": [
+          "Gemini"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentDosageReq"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentDosageReq"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentDosageReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Gemini/TreatmentType": {
+      "post": {
+        "tags": [
+          "Gemini"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentTypeReq"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentTypeReq"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentTypeReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Location/countries": {
+      "get": {
+        "tags": [
+          "Location"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Location/states/{countryIso2}": {
+      "get": {
+        "tags": [
+          "Location"
+        ],
+        "parameters": [
+          {
+            "name": "countryIso2",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Location/cities/{countryIso2}/{stateIso2}": {
+      "get": {
+        "tags": [
+          "Location"
+        ],
+        "parameters": [
+          {
+            "name": "countryIso2",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stateIso2",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/UserManager/GetAllUsers": {
       "get": {
         "tags": [
@@ -143,6 +300,20 @@
   },
   "components": {
     "schemas": {
+      "GeminiRequest": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "nullable": true
+          },
+          "lang": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LoginReqModel": {
         "type": "object",
         "properties": {
@@ -160,6 +331,51 @@
           },
           "isResendOTP": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentDosageReq": {
+        "type": "object",
+        "properties": {
+          "treatmentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "productName": {
+            "type": "string",
+            "nullable": true
+          },
+          "farmArea": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "dilutionRatio": {
+            "type": "string",
+            "nullable": true
+          },
+          "productConcentration": {
+            "type": "number",
+            "format": "double"
+          },
+          "waterAvailable": {
+            "type": "number",
+            "format": "double"
+          },
+          "preferredLanguage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentTypeReq": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -206,11 +422,6 @@
             "type": "string",
             "nullable": true
           },
-          "dob": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
           "password": {
             "type": "string",
             "nullable": true
@@ -219,23 +430,7 @@
             "type": "string",
             "nullable": true
           },
-          "city": {
-            "type": "string",
-            "nullable": true
-          },
           "flag": {
-            "type": "string",
-            "nullable": true
-          },
-          "state": {
-            "type": "string",
-            "nullable": true
-          },
-          "pinCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "userType": {
             "type": "string",
             "nullable": true
           },

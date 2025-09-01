@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PlantDiaganoseDisease.IServices;
+using PlantDiaganoseDisease.Models.RequestModels;
 using PlantDiaganoseDisease.Services;
 using System.Security.Claims;
 using System.Text;
@@ -13,6 +14,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<GeminiSettings>(
+    builder.Configuration.GetSection("Gemini"));
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IJwtAuthService, JwtAuthService>();

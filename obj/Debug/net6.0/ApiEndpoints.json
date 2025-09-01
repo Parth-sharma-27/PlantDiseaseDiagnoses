@@ -1,5 +1,100 @@
 [
   {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.GeminiController",
+    "Method": "AskGemini",
+    "RelativePath": "api/Gemini/ask",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "PlantDiaganoseDisease.Models.RequestModels.GeminiRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.GeminiController",
+    "Method": "CalculateTreatment",
+    "RelativePath": "api/Gemini/TreatmentDosageCalculator",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "input",
+        "Type": "PlantDiaganoseDisease.Models.RequestModels.TreatmentDosageReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.GeminiController",
+    "Method": "TreatmentType",
+    "RelativePath": "api/Gemini/TreatmentType",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "input",
+        "Type": "PlantDiaganoseDisease.Models.RequestModels.TreatmentTypeReq",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.LocationController",
+    "Method": "GetCities",
+    "RelativePath": "api/Location/cities/{countryIso2}/{stateIso2}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "countryIso2",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "stateIso2",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.LocationController",
+    "Method": "GetCountries",
+    "RelativePath": "api/Location/countries",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PlantDiaganoseDisease.Controllers.LocationController",
+    "Method": "GetStates",
+    "RelativePath": "api/Location/states/{countryIso2}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "countryIso2",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PlantDiaganoseDisease.Controllers.UserManagerController",
     "Method": "AuthenticateUser",
     "RelativePath": "api/UserManager/AuthenticateUser",
